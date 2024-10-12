@@ -28,3 +28,14 @@ out/
 
 # Expo files
 .expo/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
