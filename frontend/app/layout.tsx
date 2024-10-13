@@ -1,5 +1,6 @@
-// import "@/styles/globals";
-import StyledComponentsRegistry from "@/lib/registry";
+"use client";
+import GlobalStyle from "@/styles/globals"; // Import global styles
+import StyledComponentsRegistry from "@/lib/registry"; // Assuming you already have this set up
 
 export default function RootLayout({
   children,
@@ -7,9 +8,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
+    <html lang="en">
       <head />
       <body>
+        <GlobalStyle /> {/* Apply global styles */}
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
