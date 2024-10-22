@@ -18,12 +18,13 @@ export default function Home() {
           username,
         }
       );
-      setUserId(response.data.user._id);
+      setUserId(response.data.user.id);
       console.log("User registered:", response.data.user);
     } catch (err) {
       console.error(err);
     }
   };
+  console.log(userId)
 
   return (
     <div>

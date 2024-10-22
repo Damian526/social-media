@@ -6,7 +6,7 @@ import http from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import mongoose from "mongoose";
 import cors from "cors";
-
+import userRoutes from "./routes/userRoutes"
 // Create an Express app
 const app = express();
 const server = http.createServer(app);
@@ -30,14 +30,14 @@ mongoose
 app.get("/", (req: Request, res: Response) => {
   res.send("Backend is running");
 });
-
+app.use('/api/users', userRoutes);
 // WebSocket setup
 io.on("connection", (socket: Socket) => {
   console.log("New client connected:", socket.id);
 
   socket.on("message", (data: any) => {
     console.log("Message received:", data);
-    io.emit("message", data); // Broadcast message to all clients
+    io.emit("message", data); 
   });
 
   socket.on("disconnect", () => {
