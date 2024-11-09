@@ -1,16 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import * as dotenv from 'dotenv';
+import { ChatGateway } from './chat.gateway';
 
 async function bootstrap() {
-  dotenv.config();
+  // Start the HTTP server
   const app = await NestFactory.create(AppModule);
-  app.useWebSocketAdapter(new IoAdapter(app));
   app.enableCors();
+  const HTTP_PORT = process.env.HTTP_PORT || 8000;
+  await app.listen(HTTP_PORT);
+  console.log(`HTTP Server is running on port ${HTTP_PORT}`);
 
-  const PORT = process.env.PORT || 4000;
-  await app.listen(PORT);
-  console.log(`Server is running on port ${PORT}`);
+  // Start the WebSocket server on a separate port
+  const webSocketApp = await NestFactory.create(AppModule);
+  webSocketApp.useWebSocketAdapter(new IoAdapter(webSocketApp));
+  const WS_PORT = process.env.WS_PORT || 4000;
+  await webSocketApp.listen(WS_PORT);
+  console.log(`WebSocket Server is running on port ${WS_PORT}`);
 }
 bootstrap();

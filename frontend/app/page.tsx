@@ -13,18 +13,18 @@ export default function Home() {
   const registerUser = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/users/register",
+        "http://localhost:8008/api/users/register",
         {
           username,
         }
       );
-      setUserId(response.data.user.id);
-      console.log("User registered:", response.data.user);
+      setUserId(response.data.user._id);
+      console.log("User registered:", response.data.user._id);
     } catch (err) {
       console.error(err);
     }
   };
-  console.log(userId)
+
 
   return (
     <div>

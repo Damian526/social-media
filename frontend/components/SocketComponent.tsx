@@ -14,24 +14,6 @@ const SocketComponent: React.FC<{ userId: string }> = ({ userId }) => {
   const [inputMsg, setInputMsg] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
 
-  useEffect(() => {
-    const socketIo = io('http://localhost:4000');
-
-    socketIo.on('connect', () => {
-      console.log('Connected to server');
-    });
-
-    socketIo.on('message', (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-
-    setSocket(socketIo);
-
-    return () => {
-      socketIo.disconnect();
-    };
-  }, []);
-
   const sendMessage = () => {
     if (socket && inputMsg) {
       const messageData: Message = {
@@ -39,10 +21,31 @@ const SocketComponent: React.FC<{ userId: string }> = ({ userId }) => {
         content: inputMsg,
         chatRoomId: 'chatRoomId_if_applicable',
       };
+      console.log("Sending message:", messageData); // Debugging line
       socket.emit('message', messageData);
       setInputMsg('');
     }
   };
+  
+  useEffect(() => {
+    const socketIo = io('http://localhost:4000');
+  
+    socketIo.on('connect', () => {
+      console.log('Connected to server');
+    });
+  
+    socketIo.on('message', (msg: Message) => {
+      console.log('Message received on client:', msg); // Debugging line
+      setMessages((prev) => [...prev, msg]);
+    });
+  
+    setSocket(socketIo);
+  
+    return () => {
+      socketIo.disconnect();
+    };
+  }, []);
+  
 
   return (
     <div>

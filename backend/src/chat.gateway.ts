@@ -1,4 +1,11 @@
-import { WebSocketGateway, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect, MessageBody, ConnectedSocket } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -20,5 +27,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleMessage(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
     console.log('Message received:', data);
     client.broadcast.emit('message', data);
+    client.emit('message', data); 
+    console.log('Message sent back to sender:', data);
   }
 }
