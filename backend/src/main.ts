@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { ChatGateway } from './chat.gateway';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   // Start the HTTP server
   const app = await NestFactory.create(AppModule);
   app.enableCors();
+  app.useGlobalPipes(new ValidationPipe());
   const HTTP_PORT = process.env.HTTP_PORT || 8000;
   await app.listen(HTTP_PORT);
   console.log(`HTTP Server is running on port ${HTTP_PORT}`);

@@ -3,22 +3,32 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { username } = createUserDto;
-    if (!username || username.trim() === '') {
-      throw new BadRequestException('Username is required');
+    const { username, password } = createUserDto;
+
+    // Check if username already exists
+    const existingUser = await this.userModel.findOne({ username });
+    if (existingUser) {
+      throw new BadRequestException('Username already exists');
     }
 
-    const newUser = new this.userModel({ username });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new this.userModel({
+      username,
+      password: hashedPassword,
+    });
+
     return newUser.save();
   }
-
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findByUsername(username: string): Promise<User | undefined> {
+    return this.userModel.findOne({ username });
   }
 }

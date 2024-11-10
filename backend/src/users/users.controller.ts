@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schemas/user.schema';
 
 @Controller('api/users')
 export class UsersController {
@@ -14,10 +13,14 @@ export class UsersController {
   }
 
   @Post('register')
-  async register(
-    @Body() createUserDto: CreateUserDto,
-  ): Promise<{ user: User }> {
+  async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
-    return { user };
+    return {
+      message: 'User registered successfully',
+      user: {
+        id: user._id,
+        username: user.username,
+      },
+    };
   }
 }
