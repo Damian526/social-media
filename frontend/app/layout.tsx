@@ -1,6 +1,7 @@
 "use client";
-import GlobalStyle from "@/styles/globals"; // Import global styles
-import StyledComponentsRegistry from "@/lib/registry"; // Assuming you already have this set up
+import GlobalStyle from "@/styles/globals"; 
+import StyledComponentsRegistry from "@/lib/registry"; 
+import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout({
   children,
@@ -12,7 +13,9 @@ export default function RootLayout({
       <head />
       <body>
         <GlobalStyle /> {/* Apply global styles */}
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <AuthProvider>{children}</AuthProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
