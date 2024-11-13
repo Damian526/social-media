@@ -21,7 +21,7 @@ const SocketComponent: React.FC<{ userId: string }> = ({ userId }) => {
         content: inputMsg,
         chatRoomId: 'chatRoomId_if_applicable',
       };
-      console.log("Sending message:", messageData); // Debugging line
+      console.log("Sending message:", messageData); 
       socket.emit('message', messageData);
       setInputMsg('');
     }
@@ -35,7 +35,7 @@ const SocketComponent: React.FC<{ userId: string }> = ({ userId }) => {
     });
   
     socketIo.on('message', (msg: Message) => {
-      console.log('Message received on client:', msg); // Debugging line
+      console.log('Message received on client:', msg); 
       setMessages((prev) => [...prev, msg]);
     });
   
