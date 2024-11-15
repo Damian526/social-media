@@ -2,11 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   // Start the HTTP server
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.use(cookieParser());
+  app.enableCors({
+    credentials: true,
+  });
   app.useGlobalPipes(new ValidationPipe());
   const HTTP_PORT = process.env.HTTP_PORT || 7000;
   await app.listen(HTTP_PORT);
