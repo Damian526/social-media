@@ -9,6 +9,9 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
+  experimental: {
+    middlewarePrefetch: true,
+  },
 };
 
 module.exports = nextConfig;
