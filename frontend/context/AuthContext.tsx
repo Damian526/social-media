@@ -1,8 +1,10 @@
 // frontend/context/AuthContext.tsx
 "use client";
 
+"use client";
+
 import { createContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import axios from "axios";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -18,21 +20,30 @@ export const AuthContext = createContext<AuthContextProps>({
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
+    // Check authentication status on mount
+    const checkAuth = async () => {
+      try {
+        await axios.get("/api/users/profile");
+        setIsAuthenticated(true);
+      } catch (err) {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    await axios.post("/api/auth/logout");
     setIsAuthenticated(false);
-    router.push("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
