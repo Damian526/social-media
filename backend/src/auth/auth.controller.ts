@@ -14,7 +14,7 @@ export class AuthController {
     @Response({ passthrough: true }) res: ExpressResponse,
   ) {
     const token = await this.authService.login(req.user);
-
+    console.log('Generated JWT Token:', token.access_token);
     // Set the token as an HTTP-only cookie
     res.cookie('token', token.access_token, {
       httpOnly: true, // Prevent access via JavaScript

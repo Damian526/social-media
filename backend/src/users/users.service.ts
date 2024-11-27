@@ -28,7 +28,7 @@ export class UsersService {
 
     return newUser.save();
   }
-  async findByUsername(username: string): Promise<User | undefined> {
-    return this.userModel.findOne({ username });
+  async findByUsername(username: string): Promise<User | null> {
+    return this.userModel.findOne({ username }).lean().exec(); // Return a plain object
   }
 }
